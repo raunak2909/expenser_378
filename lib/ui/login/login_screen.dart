@@ -1,9 +1,16 @@
+import 'package:expenser_378/ui/sign_up/bloc/user_bloc.dart';
+import 'package:expenser_378/ui/sign_up/bloc/user_event.dart';
+import 'package:expenser_378/ui/sign_up/bloc/user_state.dart';
 import 'package:expenser_378/ui/sign_up/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../utils/routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  bool? isLoading;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +41,12 @@ class LoginScreen extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         TextField(
+          controller: emailController,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            hintText: "Phone Number",
-            prefixIcon: Icon(Icons.phone),
+            hintText: "Enter your Email here..",
+            prefixIcon: Icon(Icons.email),
+            labelText: "Email",
             filled: true,
             fillColor: Color(0xFFDDF6D2),
             border: OutlineInputBorder(
@@ -48,6 +57,7 @@ class LoginScreen extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         TextField(
+          controller: passwordController,
           obscureText: true,
           decoration: InputDecoration(
             hintText: "Password",
@@ -63,24 +73,78 @@ class LoginScreen extends StatelessWidget {
         const SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              //login logic here..
-
-              /*Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HomeScreen()));*/
+          child: BlocConsumer<UserBloc, UserState>(
+            listenWhen: (ps, cs){
+              if(isLoading!=null){
+                return true;
+              } else {
+                return false;
+              }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFB0DB9C),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              "Login",
-              style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
-            ),
+            buildWhen: (ps, cs){
+              if(isLoading!=null){
+                return true;
+              } else {
+                return false;
+              }
+            },
+            listener: (_, state){
+
+              if(state is UserLoadingState){
+                isLoading = true;
+              }
+
+              if(state is UserFailureState){
+                isLoading = false;
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMsg)));
+              }
+
+              if(state is UserSuccessState){
+                isLoading = false;
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Logged in successfully!!")));
+                Navigator.pushReplacementNamed(context, AppRoutes.HOMEPAGE);
+              }
+
+            },
+            builder: (context, state) {
+              return ElevatedButton(
+                onPressed: () {
+                  isLoading = false;
+                  context.read<UserBloc>().add(
+                    LoginEvent(
+                      email: emailController.text,
+                      pass: passwordController.text,
+                    ),
+                  );
+
+                  //login logic here..
+
+                  /*Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => HomeScreen()));*/
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFB0DB9C),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: isLoading!=null && isLoading! ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(color: Colors.white,),
+                    SizedBox(width: 8),
+                    Text(
+                      "Logging in...",
+                      style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
+                    ),
+                  ],
+                ) : Text(
+                  "Login",
+                  style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
+                ),
+              );
+            }
           ),
         ),
         const SizedBox(height: 12),
@@ -90,8 +154,8 @@ class LoginScreen extends StatelessWidget {
             Text("Don't have an account? "),
             InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+                isLoading = null;
+                Navigator.of(context).pushNamed(AppRoutes.SIGNUPPAGE);
               },
               child: Text(
                 "Sign Up",

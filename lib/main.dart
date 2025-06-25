@@ -1,8 +1,20 @@
+import 'package:expenser_378/data/local/helper/db_helper.dart';
+import 'package:expenser_378/data/local/repository/user_repository.dart';
+import 'package:expenser_378/ui/sign_up/bloc/user_bloc.dart';
 import 'package:expenser_378/utils/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    BlocProvider(
+      create: (context) => UserBloc(
+        userRepository: UserRepository(
+            dbHelper: DBHelper.getInstance()),
+      ),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,4 +33,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

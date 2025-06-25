@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:expenser_378/utils/app_constants.dart';
+import 'package:expenser_378/utils/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../login/login_screen.dart';
 
@@ -16,10 +19,23 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      navigateTo();
     });
+  }
+
+  void navigateTo() async{
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int uid = prefs.getInt(AppConstants.PREF_USER_ID_KEY) ?? 0;
+
+    String navigateToName = AppRoutes.LOGINPAGE;
+
+    if(uid>0){
+      navigateToName = AppRoutes.HOMEPAGE;
+    }
+
+    Navigator.pushReplacementNamed(context, navigateToName);
+
   }
 
   @override

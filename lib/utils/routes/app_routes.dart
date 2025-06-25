@@ -1,3 +1,4 @@
+import 'package:expenser_378/ui/home/home_page.dart';
 import 'package:expenser_378/ui/login/login_screen.dart';
 import 'package:expenser_378/ui/sign_up/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class AppRoutes{
     SPLASHPAGE: (context) => SplashScreen(),
     LOGINPAGE: (context) => LoginScreen(),
     SIGNUPPAGE: (context) => SignUpScreen(),
-    //HOMEPAGE: (context) => HomeScreen(),
+    HOMEPAGE: (context) => HomePage(),
   };
 
 }
