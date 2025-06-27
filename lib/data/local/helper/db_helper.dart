@@ -31,7 +31,7 @@ class DBHelper {
   static const String COLUMN_EXPENSE_BAL = "e_bal";
   static const String COLUMN_EXPENSE_CREATED_AT = "e_created_at";
   static const String COLUMN_EXPENSE_CAT_ID = "e_cat_id";
-  static const String COLUMN_EXPENSE_TYPE = "e_type";
+  static const String COLUMN_EXPENSE_TYPE = "e_type"; ///1-> debit, 2-> credit
 
   Future<Database> initDB() async {
     mDB ??= await openDB();

@@ -1,3 +1,4 @@
+import 'package:expenser_378/ui/add_expense/add_expense_page.dart';
 import 'package:expenser_378/ui/home/home_page.dart';
 import 'package:expenser_378/ui/login/login_screen.dart';
 import 'package:expenser_378/ui/sign_up/sign_up_screen.dart';
@@ -20,6 +21,7 @@ class AppRoutes{
     LOGINPAGE: (context) => LoginScreen(),
     SIGNUPPAGE: (context) => SignUpScreen(),
     HOMEPAGE: (context) => HomePage(),
+    ADDEXPENSEPAGE: (context) => AddExpensePage(),
   };
 
 }
