@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../model/expense_model.dart';
+
 class DBHelper {
   DBHelper._();
 
@@ -49,7 +51,7 @@ class DBHelper {
           "CREATE TABLE $TABLE_USER ($COLUMN_USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USER_NAME TEXT, $COLUMN_USER_EMAIL TEXT, $COLUMN_USER_MOB_NO TEXT, $COLUMN_USER_PASS TEXT)",
         );
         db.execute(
-          "CREATE TABLE $TABLE_EXPENSE ($COLUMN_EXPENSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USER_ID INTEGER, $COLUMN_EXPENSE_TITLE TEXT, $COLUMN_EXPENSE_DESC TEXT, $COLUMN_EXPENSE_AMOUNT INTEGER, $COLUMN_EXPENSE_BAL INTEGER, $COLUMN_EXPENSE_CREATED_AT TEXT, $COLUMN_EXPENSE_CAT_ID INTEGER, $COLUMN_EXPENSE_TYPE TEXT)",
+          "CREATE TABLE $TABLE_EXPENSE ($COLUMN_EXPENSE_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_USER_ID INTEGER, $COLUMN_EXPENSE_TITLE TEXT, $COLUMN_EXPENSE_DESC TEXT, $COLUMN_EXPENSE_AMOUNT INTEGER, $COLUMN_EXPENSE_BAL INTEGER, $COLUMN_EXPENSE_CREATED_AT TEXT, $COLUMN_EXPENSE_CAT_ID INTEGER, $COLUMN_EXPENSE_TYPE INTEGER)",
         );
       },
     );
@@ -73,11 +75,7 @@ class DBHelper {
 
     return data.isNotEmpty;
   }
-
-  Future<int> authenticateUser({
-    required String email,
-    required String pass,
-  }) async {
+  Future<int> authenticateUser({required String email, required String pass,}) async {
     var db = await initDB();
 
     List<Map<String, dynamic>> allData = await db.query(
@@ -93,4 +91,26 @@ class DBHelper {
 
     return allData.isNotEmpty ? allData[0][COLUMN_USER_ID] : 0;
   }
+
+  Future<bool> addNewExpense({required ExpenseModel newExp}) async {
+    var db =  await initDB();
+    int rowsEffected = await db.insert(TABLE_EXPENSE, newExp.toMap());
+    return rowsEffected>0;
+  }
+
+  Future<List<ExpenseModel>> getAllExpenses() async{
+
+    var db = await initDB();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int uid = prefs.getInt(AppConstants.PREF_USER_ID_KEY) ?? 0;
+
+    List<Map<String, dynamic>> mData = await db.query(TABLE_EXPENSE, where: "$COLUMN_USER_ID = ?", whereArgs: ["$uid"]);
+    List<ExpenseModel> allExp = [];
+
+    for(int i = 0; i<mData.length; i++){
+      allExp.add(ExpenseModel.fromMap(mData[i]));
+    }
+    return allExp;
+  }
+
 }

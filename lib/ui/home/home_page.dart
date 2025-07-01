@@ -65,10 +65,16 @@ class HomePage extends StatelessWidget {
 */
 
 
+import 'dart:math';
+
+import 'package:expenser_378/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/routes/app_routes.dart';
+import 'bloc/expense_bloc.dart';
+import 'bloc/expense_state.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -180,7 +186,64 @@ class _Home_PageState extends State<HomePage> {
 
               Text('Expense List',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
 
-              Container(
+              Expanded(
+                child: BlocBuilder<ExpenseBloc, ExpenseState>(builder: (_, state){
+
+                  if(state is ExpenseLoadingState){
+                    return Center(child: CircularProgressIndicator(),);
+                  }
+
+                  if(state is ExpenseLoadedState) {
+                    return state.allExp.isNotEmpty ? ListView.builder(
+                      itemCount: state.allExp.length,
+                        itemBuilder: (_, index){
+
+                        String imgPath = AppConstants.mCatList.where((e){
+                          return e.catId == state.allExp[index].cat_id;
+                        }).toList()[0].catImg;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 11.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              padding: EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                color: Colors.primaries[Random().nextInt(Colors.primaries.length)].shade100,
+                                borderRadius: BorderRadius.circular(11)
+                              ),
+                              child: Image.asset(imgPath),
+                            ),
+                            SizedBox(width: 10,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(state.allExp[index].title,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                Text(state.allExp[index].desc,style: TextStyle(fontSize: 15,color: Colors.black87),),
+                              ],
+                            ),
+                            Spacer(),
+                            Text('-\$ ${state.allExp[index].amt}',style: TextStyle(fontSize: 20,color: Colors.pink.shade200),)
+                          ],
+                        ),
+                      );
+                    }) : Center(
+                      child: Text("No Expenses Found!!",style: TextStyle(fontSize: 20),)
+                    );
+                  }
+
+                  if(state is ExpenseErrorState) {
+                   return Center(child: Text(state.errorMsg),);
+                  }
+
+
+                  return Container();
+                }),
+              )
+
+              /*Container(
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
@@ -307,7 +370,7 @@ class _Home_PageState extends State<HomePage> {
                     ],
                   ),
                 ),
-              ),
+              ),*/
 
 
 

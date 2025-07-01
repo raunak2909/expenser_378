@@ -1,8 +1,13 @@
 import 'package:expenser_378/data/local/model/expense_model.dart';
+import 'package:expenser_378/ui/home/bloc/expense_bloc.dart';
+import 'package:expenser_378/ui/home/bloc/expense_event.dart';
 import 'package:expenser_378/utils/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../home/bloc/expense_state.dart';
 
 class AddExpensePage extends StatelessWidget {
   TextEditingController titleController = TextEditingController();
@@ -114,16 +119,10 @@ class AddExpensePage extends StatelessWidget {
               menuStyle: MenuStyle(
                 alignment: Alignment.bottomLeft,
                 minimumSize: WidgetStatePropertyAll(
-                  Size(MediaQuery
-                      .of(context)
-                      .size
-                      .width - 42, 100),
+                  Size(MediaQuery.of(context).size.width - 42, 100),
                 ),
                 maximumSize: WidgetStatePropertyAll(
-                  Size(MediaQuery
-                      .of(context)
-                      .size
-                      .width - 42, 100),
+                  Size(MediaQuery.of(context).size.width - 42, 100),
                 ),
                 backgroundColor: WidgetStatePropertyAll(Color(0xFFDDF6D2)),
                 shape: WidgetStatePropertyAll(
@@ -203,9 +202,9 @@ class AddExpensePage extends StatelessWidget {
                             padding: EdgeInsets.symmetric(vertical: 11),
                             child: GridView.builder(
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                              ),
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4,
+                                  ),
                               itemCount: AppConstants.mCatList.length,
                               itemBuilder: (_, index) {
                                 return InkWell(
@@ -218,10 +217,13 @@ class AddExpensePage extends StatelessWidget {
                                     children: [
                                       Image.asset(
                                         AppConstants.mCatList[index].catImg,
-                                        width: 50, height: 50,),
-                                      SizedBox(height: 11,),
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                      SizedBox(height: 11),
                                       Text(
-                                          AppConstants.mCatList[index].catName),
+                                        AppConstants.mCatList[index].catName,
+                                      ),
                                     ],
                                   ),
                                 );
@@ -239,18 +241,24 @@ class AddExpensePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(21),
                       ),
                     ),
-                    child: selectedCatIndex < 0 ? Text(
-                      "Select Category",
-                      style: TextStyle(fontSize: 16),
-                    ) : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(AppConstants.mCatList[selectedCatIndex]
-                            .catImg, width: 30, height: 30,),
-                        Text(" - ${AppConstants.mCatList[selectedCatIndex]
-                            .catName}")
-                      ],
-                    ),
+                    child: selectedCatIndex < 0
+                        ? Text(
+                            "Select Category",
+                            style: TextStyle(fontSize: 16),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppConstants.mCatList[selectedCatIndex].catImg,
+                                width: 30,
+                                height: 30,
+                              ),
+                              Text(
+                                " - ${AppConstants.mCatList[selectedCatIndex].catName}",
+                              ),
+                            ],
+                          ),
                   );
                 },
               ),
@@ -258,7 +266,37 @@ class AddExpensePage extends StatelessWidget {
             SizedBox(height: 11),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(
+              child: BlocListener<ExpenseBloc, ExpenseState>(
+                listener: (context, state) {
+
+                  if(state is ExpenseErrorState) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMsg)));
+                  }
+
+                  if(state is ExpenseLoadingState){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Row(
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(width: 11),
+                        Text("Adding your expense..."),
+                      ],
+                    ), duration: Duration(milliseconds: 200), backgroundColor: Colors.green,));
+                  }
+
+                  if(state is ExpenseLoadedState) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Row(
+                      children: [
+                        Icon(Icons.done),
+                        SizedBox(width: 11),
+                        Text("Expense added successfully"),
+                      ],
+                    ), backgroundColor: Colors.amber,));
+                  }
+
+                },
+                child: OutlinedButton(
                   onPressed: () async {
                     if (titleController.text.isNotEmpty &&
                         descController.text.isNotEmpty &&
@@ -269,29 +307,38 @@ class AddExpensePage extends StatelessWidget {
                         num amt = double.parse(amtController.text);
                         num bal = 0;
                         String createdAt = (selectedDate ?? DateTime.now())
-                            .millisecondsSinceEpoch.toString();
-                        int catId = AppConstants.mCatList[selectedCatIndex]
-                            .catId;
+                            .millisecondsSinceEpoch
+                            .toString();
+                        int catId = AppConstants.mCatList[selectedCatIndex].catId;
 
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        int userId = prefs.getInt(AppConstants.PREF_USER_ID_KEY) ?? 0;
+                        SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                        int userId =
+                            prefs.getInt(AppConstants.PREF_USER_ID_KEY) ?? 0;
 
                         ExpenseModel newExp = ExpenseModel(
-                            user_id: userId,
-                            title: title,
-                            desc: desc,
-                            amt: amt,
-                            bal: bal,
-                            cat_id: catId,
-                            created_at: createdAt,
-                            type: selectedType == "Debit" ? 1 : 2);
+                          user_id: userId,
+                          title: title,
+                          desc: desc,
+                          amt: amt,
+                          bal: bal,
+                          cat_id: catId,
+                          created_at: createdAt,
+                          type: selectedType == "Debit" ? 1 : 2,
+                        );
+
+                        context.read<ExpenseBloc>().add(
+                          AddExpenseEvent(newExpense: newExp),
+                        );
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Please select a category")));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Please select a category")),
+                        );
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Please fill all the fields")));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Please fill all the fields")),
+                      );
                     }
                   },
                   style: OutlinedButton.styleFrom(
@@ -305,7 +352,8 @@ class AddExpensePage extends StatelessWidget {
                   child: Text(
                     "Add Expense",
                     style: TextStyle(fontSize: 16, color: Colors.white),
-                  )
+                  ),
+                ),
               ),
             ),
           ],
