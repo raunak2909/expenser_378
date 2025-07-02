@@ -74,6 +74,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/routes/app_routes.dart';
 import 'bloc/expense_bloc.dart';
+import 'bloc/expense_event.dart';
 import 'bloc/expense_state.dart';
 
 class HomePage extends StatefulWidget {
@@ -82,6 +83,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _Home_PageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ExpenseBloc>().add(FetchInitialExpenseEvent());
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -94,7 +101,7 @@ class _Home_PageState extends State<HomePage> {
               child: Image.asset("assets/images/logo_expansive.png", width: 50, height: 50, fit: BoxFit.fill,)),
           Text("Monety",style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 30,
+              fontSize: 25,
               color: Colors.black
           ),),
         ],
@@ -127,9 +134,10 @@ class _Home_PageState extends State<HomePage> {
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Morning",style: TextStyle(fontSize: 18,color: Colors.black54),),
-                        Text("Soumik Nath",style: TextStyle(fontSize: 20,),)
+                        Text("Morning",style: TextStyle(fontSize: 16,color: Colors.black54),),
+                        Text("Soumik Nath",style: TextStyle(fontSize: 16,),)
                       ],
                     ),
 
@@ -140,11 +148,12 @@ class _Home_PageState extends State<HomePage> {
                       height: 50,
                       decoration: BoxDecoration(
                         color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(11),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text('This month',style: TextStyle(fontSize: 20),),
+                          Text('This month',style: TextStyle(fontSize: 16),),
                           Icon(Icons.arrow_drop_down)
                         ],
                       ),
@@ -156,7 +165,7 @@ class _Home_PageState extends State<HomePage> {
 
               Container(
                 width: double.infinity,
-                height: 180,
+                height: 160,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(11),
                   color: Colors.blue,
@@ -165,13 +174,18 @@ class _Home_PageState extends State<HomePage> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text('Expense total',style: TextStyle(color: Colors.white,fontSize: 15),),
                       Text('\$3734',style: TextStyle(color: Colors.white, fontSize: 40,fontWeight: FontWeight.bold),),
                       Row(
                         children: [
                           Container(
-                              color:Colors.red,
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                color:Colors.red,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                               child: Text('\$-240',style: TextStyle(color: Colors.white,fontSize: 15),)),
                           SizedBox(width: 10,),
                           Text('than last month',style: TextStyle(color: Colors.white,fontSize: 15),),
@@ -184,8 +198,8 @@ class _Home_PageState extends State<HomePage> {
 
               SizedBox(height: 10,),
 
-              Text('Expense List',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-
+              Text('Expense List',style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),),
+              SizedBox(height: 11,),
               Expanded(
                 child: BlocBuilder<ExpenseBloc, ExpenseState>(builder: (_, state){
 
@@ -197,35 +211,69 @@ class _Home_PageState extends State<HomePage> {
                     return state.allExp.isNotEmpty ? ListView.builder(
                       itemCount: state.allExp.length,
                         itemBuilder: (_, index){
-
-                        String imgPath = AppConstants.mCatList.where((e){
-                          return e.catId == state.allExp[index].cat_id;
-                        }).toList()[0].catImg;
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 11.0),
-                        child: Row(
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 11),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          border: Border.all(
+                            color: Colors.black26,
+                            width: 1
+                          )
+                        ),
+                        child: Column(
                           children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              padding: EdgeInsets.all(7),
-                              decoration: BoxDecoration(
-                                color: Colors.primaries[Random().nextInt(Colors.primaries.length)].shade100,
-                                borderRadius: BorderRadius.circular(11)
-                              ),
-                              child: Image.asset(imgPath),
-                            ),
-                            SizedBox(width: 10,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(state.allExp[index].title,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                                Text(state.allExp[index].desc,style: TextStyle(fontSize: 15,color: Colors.black87),),
+                                Text(
+                                  state.allExp[index].title,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text("\$${state.allExp[index].totalAmt}",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
-                            Spacer(),
-                            Text('-\$ ${state.allExp[index].amt}',style: TextStyle(fontSize: 20,color: Colors.pink.shade200),)
+                            Divider(),
+                            ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: state.allExp[index].expList.length,
+                                itemBuilder: (_, childIndex){
+
+                                  String imgPath = AppConstants.mCatList.where((e){
+                                    return e.catId == state.allExp[index].expList[childIndex].cat_id;
+                                  }).toList()[0].catImg;
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 11.0),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          padding: EdgeInsets.all(7),
+                                          decoration: BoxDecoration(
+                                              color: Colors.primaries[Random().nextInt(Colors.primaries.length)].shade100,
+                                              borderRadius: BorderRadius.circular(11)
+                                          ),
+                                          child: Image.asset(imgPath),
+                                        ),
+                                        SizedBox(width: 10,),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(state.allExp[index].expList[childIndex].title,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                                            Text(state.allExp[index].expList[childIndex].desc,style: TextStyle(fontSize: 14,color: Colors.black87),),
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        Text('-\$ ${state.allExp[index].expList[childIndex].amt}',style: TextStyle(fontSize: 16,color: Colors.pink.shade200),)
+                                      ],
+                                    ),
+                                  );
+                                })
                           ],
                         ),
                       );
