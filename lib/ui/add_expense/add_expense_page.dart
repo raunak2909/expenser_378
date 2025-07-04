@@ -131,6 +131,9 @@ class AddExpensePage extends StatelessWidget {
                   ),
                 ),
               ),
+              onSelected: (value){
+                selectedType = value!;
+              },
               inputDecorationTheme: InputDecorationTheme(
                 filled: true,
                 fillColor: Color(0xFFDDF6D2),

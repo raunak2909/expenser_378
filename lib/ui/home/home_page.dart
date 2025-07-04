@@ -64,7 +64,6 @@ class HomePage extends StatelessWidget {
 }
 */
 
-
 import 'dart:math';
 
 import 'package:expenser_378/utils/app_constants.dart';
@@ -83,29 +82,44 @@ class HomePage extends StatefulWidget {
 }
 
 class _Home_PageState extends State<HomePage> {
+  List<String> mFilterType = ["Date", "Month", "Year", "Category"];
+
+  String mSelectedFilterType = "Date";
 
   @override
   void initState() {
     super.initState();
     context.read<ExpenseBloc>().add(FetchInitialExpenseEvent());
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Row(
-        children: [
-          Container(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Container(
               width: 25,
               height: 25,
-              child: Image.asset("assets/images/logo_expansive.png", width: 50, height: 50, fit: BoxFit.fill,)),
-          Text("Monety",style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-              color: Colors.black
-          ),),
-        ],
-      ),),
+              child: Image.asset(
+                "assets/images/logo_expansive.png",
+                width: 50,
+                height: 50,
+                fit: BoxFit.fill,
+              ),
+            ),
+            Text(
+              "Monety",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
 
       body: Container(
         width: double.infinity,
@@ -114,7 +128,6 @@ class _Home_PageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Container(
                 width: double.infinity,
                 height: 60,
@@ -124,26 +137,59 @@ class _Home_PageState extends State<HomePage> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          image: DecorationImage(
-                              image: AssetImage("assets/images/soumik_profile.jpg"),
-                              fit: BoxFit.cover)
+                        borderRadius: BorderRadius.circular(25),
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/soumik_profile.jpg"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ) ,
-                    SizedBox(width: 5,),
+                    ),
+                    SizedBox(width: 5),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Morning",style: TextStyle(fontSize: 16,color: Colors.black54),),
-                        Text("Soumik Nath",style: TextStyle(fontSize: 16,),)
+                        Text(
+                          "Morning",
+                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                        ),
+                        Text("Soumik Nath", style: TextStyle(fontSize: 16)),
                       ],
                     ),
 
                     Spacer(),
+                    DropdownMenu(
+                      initialSelection: mSelectedFilterType,
+                      width: 150,
+                      inputDecorationTheme: InputDecorationTheme(
+                        filled: true,
+                        fillColor: Color(0xFFDDF6D2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(21),
+                        ),
+                      ),
+                      onSelected: (value) {
+                        int filterType = 1;
+                        if (value == "Date") {
+                          filterType = 1;
+                        } else if (value == "Month") {
+                          filterType = 2;
+                        } else if (value == "Year") {
+                          filterType = 3;
+                        } else {
+                          filterType = 4;
+                        }
+                        context.read<ExpenseBloc>().add(
+                          FetchInitialExpenseEvent(filterType: filterType),
+                        );
+                      },
+                      dropdownMenuEntries: mFilterType.map((e) {
+                        return DropdownMenuEntry(value: e, label: e);
+                      }).toList(),
+                    ),
 
-                    Container(
+                    /*Container(
                       width: 140,
                       height: 50,
                       decoration: BoxDecoration(
@@ -157,11 +203,11 @@ class _Home_PageState extends State<HomePage> {
                           Icon(Icons.arrow_drop_down)
                         ],
                       ),
-                    )
+                    )*/
                   ],
                 ),
-
               ),
+              SizedBox(height: 11),
 
               Container(
                 width: double.infinity,
@@ -176,19 +222,39 @@ class _Home_PageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('Expense total',style: TextStyle(color: Colors.white,fontSize: 15),),
-                      Text('\$3734',style: TextStyle(color: Colors.white, fontSize: 40,fontWeight: FontWeight.bold),),
+                      Text(
+                        'Expense total',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      Text(
+                        '\$3734',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Row(
                         children: [
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                color:Colors.red,
-                                borderRadius: BorderRadius.circular(5),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              '\$-240',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
                               ),
-                              child: Text('\$-240',style: TextStyle(color: Colors.white,fontSize: 15),)),
-                          SizedBox(width: 10,),
-                          Text('than last month',style: TextStyle(color: Colors.white,fontSize: 15),),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'than last month',
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
                         ],
                       ),
                     ],
@@ -196,100 +262,161 @@ class _Home_PageState extends State<HomePage> {
                 ),
               ),
 
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
 
-              Text('Expense List',style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),),
-              SizedBox(height: 11,),
+              Text(
+                'Expense List',
+                style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 11),
               Expanded(
-                child: BlocBuilder<ExpenseBloc, ExpenseState>(builder: (_, state){
+                child: BlocBuilder<ExpenseBloc, ExpenseState>(
+                  builder: (_, state) {
+                    if (state is ExpenseLoadingState) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-                  if(state is ExpenseLoadingState){
-                    return Center(child: CircularProgressIndicator(),);
-                  }
-
-                  if(state is ExpenseLoadedState) {
-                    return state.allExp.isNotEmpty ? ListView.builder(
-                      itemCount: state.allExp.length,
-                        itemBuilder: (_, index){
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 11),
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(11),
-                          border: Border.all(
-                            color: Colors.black26,
-                            width: 1
-                          )
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  state.allExp[index].title,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("\$${state.allExp[index].totalAmt}",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            Divider(),
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: state.allExp[index].expList.length,
-                                itemBuilder: (_, childIndex){
-
-                                  String imgPath = AppConstants.mCatList.where((e){
-                                    return e.catId == state.allExp[index].expList[childIndex].cat_id;
-                                  }).toList()[0].catImg;
-
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 11.0),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          padding: EdgeInsets.all(7),
-                                          decoration: BoxDecoration(
-                                              color: Colors.primaries[Random().nextInt(Colors.primaries.length)].shade100,
-                                              borderRadius: BorderRadius.circular(11)
-                                          ),
-                                          child: Image.asset(imgPath),
-                                        ),
-                                        SizedBox(width: 10,),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(state.allExp[index].expList[childIndex].title,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-                                            Text(state.allExp[index].expList[childIndex].desc,style: TextStyle(fontSize: 14,color: Colors.black87),),
-                                          ],
-                                        ),
-                                        Spacer(),
-                                        Text('-\$ ${state.allExp[index].expList[childIndex].amt}',style: TextStyle(fontSize: 16,color: Colors.pink.shade200),)
-                                      ],
+                    if (state is ExpenseLoadedState) {
+                      return state.allExp.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: state.allExp.length,
+                              itemBuilder: (_, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 11),
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    border: Border.all(
+                                      color: Colors.black26,
+                                      width: 1,
                                     ),
-                                  );
-                                })
-                          ],
-                        ),
-                      );
-                    }) : Center(
-                      child: Text("No Expenses Found!!",style: TextStyle(fontSize: 20),)
-                    );
-                  }
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            state.allExp[index].title,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            "\$${state.allExp[index].totalAmt.toString().split(".")[1] == "0" ? state.allExp[index].totalAmt.toInt() : state.allExp[index].totalAmt}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Divider(),
+                                      ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            state.allExp[index].expList.length,
+                                        itemBuilder: (_, childIndex) {
+                                          String imgPath = AppConstants.mCatList
+                                              .where((e) {
+                                                return e.catId ==
+                                                    state
+                                                        .allExp[index]
+                                                        .expList[childIndex]
+                                                        .cat_id;
+                                              })
+                                              .toList()[0]
+                                              .catImg;
 
-                  if(state is ExpenseErrorState) {
-                   return Center(child: Text(state.errorMsg),);
-                  }
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 11.0,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  padding: EdgeInsets.all(7),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors
+                                                        .primaries[Random()
+                                                            .nextInt(
+                                                              Colors
+                                                                  .primaries
+                                                                  .length,
+                                                            )]
+                                                        .shade100,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          11,
+                                                        ),
+                                                  ),
+                                                  child: Image.asset(imgPath),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      state
+                                                          .allExp[index]
+                                                          .expList[childIndex]
+                                                          .title,
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      state
+                                                          .allExp[index]
+                                                          .expList[childIndex]
+                                                          .desc,
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black87,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  '-\$ ${state.allExp[index].expList[childIndex].amt}',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.pink.shade200,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                                "No Expenses Found!!",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            );
+                    }
 
+                    if (state is ExpenseErrorState) {
+                      return Center(child: Text(state.errorMsg));
+                    }
 
-                  return Container();
-                }),
-              )
+                    return Container();
+                  },
+                ),
+              ),
 
               /*Container(
                 width: double.infinity,
@@ -419,19 +546,16 @@ class _Home_PageState extends State<HomePage> {
                   ),
                 ),
               ),*/
-
-
-
-
             ],
           ),
         ),
-
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.pushNamed(context, AppRoutes.ADDEXPENSEPAGE);
-      }, child: Icon(Icons.add),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.ADDEXPENSEPAGE);
+        },
+        child: Icon(Icons.add),
+      ),
     );
-
   }
 }

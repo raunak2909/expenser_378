@@ -29,7 +29,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState>{
     on<FetchInitialExpenseEvent>((event, emit) async{
       emit(ExpenseLoadingState());
 
-      List<FilteredExpenseModel > mExp = await expenseRepository.fetchAllExpenses();
+      List<FilteredExpenseModel > mExp = await expenseRepository.fetchAllExpenses(filterType: event.filterType);
 
       emit(ExpenseLoadedState(allExp: mExp));
     });
