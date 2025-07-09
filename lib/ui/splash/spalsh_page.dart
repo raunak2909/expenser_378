@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     String navigateToName = AppRoutes.LOGINPAGE;
 
     if(uid>0){
-      navigateToName = AppRoutes.HOMEPAGE;
+      navigateToName = AppRoutes.DASHBOARDPAGE;
     }
 
     Navigator.pushReplacementNamed(context, navigateToName);

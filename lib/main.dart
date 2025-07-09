@@ -1,7 +1,7 @@
 import 'package:expenser_378/data/local/helper/db_helper.dart';
 import 'package:expenser_378/data/local/repository/expense_repository.dart';
 import 'package:expenser_378/data/local/repository/user_repository.dart';
-import 'package:expenser_378/ui/home/bloc/expense_bloc.dart';
+import 'package:expenser_378/ui/dashboard_page/nav_pages/home/bloc/expense_bloc.dart';
 import 'package:expenser_378/ui/sign_up/bloc/user_bloc.dart';
 import 'package:expenser_378/utils/routes/app_routes.dart';
 import 'package:flutter/material.dart';

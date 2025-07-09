@@ -1,13 +1,13 @@
 import 'package:expenser_378/data/local/model/expense_model.dart';
-import 'package:expenser_378/ui/home/bloc/expense_bloc.dart';
-import 'package:expenser_378/ui/home/bloc/expense_event.dart';
 import 'package:expenser_378/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../home/bloc/expense_state.dart';
+import '../dashboard_page/nav_pages/home/bloc/expense_bloc.dart';
+import '../dashboard_page/nav_pages/home/bloc/expense_event.dart';
+import '../dashboard_page/nav_pages/home/bloc/expense_state.dart';
 
 class AddExpensePage extends StatelessWidget {
   TextEditingController titleController = TextEditingController();

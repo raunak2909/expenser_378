@@ -70,8 +70,7 @@ import 'package:expenser_378/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../utils/routes/app_routes.dart';
+import '../../../../utils/routes/app_routes.dart';
 import 'bloc/expense_bloc.dart';
 import 'bloc/expense_event.dart';
 import 'bloc/expense_state.dart';
@@ -170,7 +169,7 @@ class _Home_PageState extends State<HomePage> {
                         ),
                       ),
                       onSelected: (value) {
-                        int filterType = 1;
+                        int filterType;
                         if (value == "Date") {
                           filterType = 1;
                         } else if (value == "Month") {
