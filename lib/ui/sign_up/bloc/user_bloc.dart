@@ -1,3 +1,4 @@
+import 'package:expenser_378/data/local/model/user_model.dart';
 import 'package:expenser_378/data/local/repository/user_repository.dart';
 import 'package:expenser_378/ui/sign_up/bloc/user_event.dart';
 import 'package:expenser_378/ui/sign_up/bloc/user_state.dart';
@@ -36,6 +37,15 @@ class UserBloc extends Bloc<UserEvent, UserState>{
         emit(UserFailureState(errorMsg: "Incorrect Password"));
       }
 
+
+    });
+
+    on<GetUserDetailsEvent>((event, emit) async{
+      emit(UserLoadingState());
+
+      UserModel user = await userRepository.getUserDetails();
+
+      emit(UserLoadedState(userModel: user));
 
     });
 

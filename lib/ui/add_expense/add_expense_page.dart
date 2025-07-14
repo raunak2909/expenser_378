@@ -20,9 +20,13 @@ class AddExpensePage extends StatelessWidget {
   DateTime? selectedDate;
   DateFormat df = DateFormat.yMMMEd();
   int selectedCatIndex = -1;
+  Color tfColor = Color(0xFFDDF6D2);
 
   @override
   Widget build(BuildContext context) {
+
+    tfColor = Theme.of(context).brightness==Brightness.dark ? Color(0xFF3D4C2E) : Color(0xFFDDF6D2);
+
     return Scaffold(
       appBar: AppBar(title: Text("Add Expense")),
 
@@ -36,7 +40,7 @@ class AddExpensePage extends StatelessWidget {
                 hintText: "Title",
                 prefixIcon: Icon(Icons.title),
                 filled: true,
-                fillColor: Color(0xFFDDF6D2),
+                fillColor: tfColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(21),
                 ),
@@ -49,7 +53,7 @@ class AddExpensePage extends StatelessWidget {
                 hintText: "Desc",
                 prefixIcon: Icon(Icons.description),
                 filled: true,
-                fillColor: Color(0xFFDDF6D2),
+                fillColor: tfColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(21),
                 ),
@@ -63,7 +67,7 @@ class AddExpensePage extends StatelessWidget {
                 hintText: "Amount",
                 prefixIcon: Icon(Icons.money),
                 filled: true,
-                fillColor: Color(0xFFDDF6D2),
+                fillColor: tfColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(21),
                 ),
@@ -124,7 +128,7 @@ class AddExpensePage extends StatelessWidget {
                 maximumSize: WidgetStatePropertyAll(
                   Size(MediaQuery.of(context).size.width - 42, 100),
                 ),
-                backgroundColor: WidgetStatePropertyAll(Color(0xFFDDF6D2)),
+                backgroundColor: WidgetStatePropertyAll(tfColor),
                 shape: WidgetStatePropertyAll(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(21),
@@ -136,7 +140,7 @@ class AddExpensePage extends StatelessWidget {
               },
               inputDecorationTheme: InputDecorationTheme(
                 filled: true,
-                fillColor: Color(0xFFDDF6D2),
+                fillColor: tfColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(21),
                 ),
@@ -177,7 +181,7 @@ class AddExpensePage extends StatelessWidget {
                     },
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.infinity, 55),
-                      backgroundColor: Color(0xFFDDF6D2),
+                      backgroundColor: tfColor,
                       side: BorderSide(width: 1, color: Colors.black),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(21),
@@ -238,7 +242,7 @@ class AddExpensePage extends StatelessWidget {
                     },
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.infinity, 55),
-                      backgroundColor: Color(0xFFDDF6D2),
+                      backgroundColor: tfColor,
                       side: BorderSide(width: 1, color: Colors.black),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(21),
@@ -288,7 +292,7 @@ class AddExpensePage extends StatelessWidget {
                   }
 
                   if(state is ExpenseLoadedState) {
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Row(
                       children: [
                         Icon(Icons.done),

@@ -66,6 +66,9 @@ class HomePage extends StatelessWidget {
 
 import 'dart:math';
 
+import 'package:expenser_378/ui/sign_up/bloc/user_bloc.dart';
+import 'package:expenser_378/ui/sign_up/bloc/user_event.dart';
+import 'package:expenser_378/ui/sign_up/bloc/user_state.dart';
 import 'package:expenser_378/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,14 +88,20 @@ class _Home_PageState extends State<HomePage> {
 
   String mSelectedFilterType = "Date";
 
+  bool isDark = false;
+
   @override
   void initState() {
     super.initState();
     context.read<ExpenseBloc>().add(FetchInitialExpenseEvent());
+    context.read<UserBloc>().add(GetUserDetailsEvent());
   }
 
   @override
   Widget build(BuildContext context) {
+
+    isDark = Theme.of(context).brightness==Brightness.dark;
+
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -143,18 +152,29 @@ class _Home_PageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 11),
 
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Morning",
-                          style: TextStyle(fontSize: 16, color: Colors.black54),
-                        ),
-                        Text("Soumik Nath", style: TextStyle(fontSize: 16)),
-                      ],
+                    BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if(state is UserLoadingState){
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if(state is UserLoadedState){
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Morning",
+                                style: TextStyle(fontSize: 16, color: Theme.of(context).brightness==Brightness.dark ? Colors.white54 : Colors.black54),
+                              ),
+                              Text(state.userModel.name, style: TextStyle(fontSize: 16)),
+                              Text(state.userModel.email, style: TextStyle(fontSize: 11, color: Colors.black54)),
+                            ],
+                          );
+                        }
+                        return Container();
+                      }
                     ),
 
                     Spacer(),
@@ -163,7 +183,7 @@ class _Home_PageState extends State<HomePage> {
                       width: 150,
                       inputDecorationTheme: InputDecorationTheme(
                         filled: true,
-                        fillColor: Color(0xFFDDF6D2),
+                        fillColor: isDark? Color(0xFF3D4C2E) : Color(0xFFDDF6D2),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(21),
                         ),
@@ -286,7 +306,7 @@ class _Home_PageState extends State<HomePage> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
                                     border: Border.all(
-                                      color: Colors.black26,
+                                      color: isDark ? Colors.white54 : Colors.black26,
                                       width: 1,
                                     ),
                                   ),

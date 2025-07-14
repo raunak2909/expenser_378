@@ -12,3 +12,5 @@ class LoginEvent extends UserEvent{
   String pass;
   LoginEvent({required this.email, required this.pass});
 }
+
+class GetUserDetailsEvent extends UserEvent{}

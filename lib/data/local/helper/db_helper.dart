@@ -56,6 +56,13 @@ class DBHelper {
       },
     );
   }
+  Future<UserModel> getUser({required int userId}) async{
+    var db = await initDB();
+
+    List<Map<String, dynamic>> mData = await db.query(TABLE_USER, where: "$COLUMN_USER_ID = ?", whereArgs: ["$userId"]);
+
+    return UserModel.fromMap(mData[0]);
+  }
 
   ///events
   Future<bool> registerUser({required UserModel user}) async {

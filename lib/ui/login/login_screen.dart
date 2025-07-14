@@ -75,18 +75,10 @@ class LoginScreen extends StatelessWidget {
           width: double.infinity,
           child: BlocConsumer<UserBloc, UserState>(
             listenWhen: (ps, cs){
-              if(isLoading!=null){
-                return true;
-              } else {
-                return false;
-              }
+              return isLoading!=null;
             },
             buildWhen: (ps, cs){
-              if(isLoading!=null){
-                return true;
-              } else {
-                return false;
-              }
+              return isLoading!=null;
             },
             listener: (_, state){
 

@@ -35,4 +35,10 @@ class UserRepository{
     }
   }
 
+  Future<UserModel> getUserDetails() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt(AppConstants.PREF_USER_ID_KEY) ?? 0;
+    return await dbHelper.getUser(userId: id);
+  }
+
 }
