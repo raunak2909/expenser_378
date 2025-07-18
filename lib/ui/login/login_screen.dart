@@ -11,11 +11,14 @@ class LoginScreen extends StatelessWidget {
   bool? isLoading;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isDark = false;
 
   @override
   Widget build(BuildContext context) {
+
+    isDark = Theme.of(context).brightness==Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Color(0xFFF2F2F2),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Column(
@@ -34,7 +37,7 @@ class LoginScreen extends StatelessWidget {
           "Login to your Account !",
           style: TextStyle(
             fontSize: 24,
-            color: Color(0xFF333333),
+            //color: Color(0xFF333333),
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
@@ -48,7 +51,7 @@ class LoginScreen extends StatelessWidget {
             prefixIcon: Icon(Icons.email),
             labelText: "Email",
             filled: true,
-            fillColor: Color(0xFFDDF6D2),
+            fillColor: isDark ?  Color(0xFF3D4C2E) : Color(0xFFDDF6D2),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -63,7 +66,7 @@ class LoginScreen extends StatelessWidget {
             hintText: "Password",
             prefixIcon: Icon(Icons.lock),
             filled: true,
-            fillColor: Color(0xFFDDF6D2),
+            fillColor: isDark ?  Color(0xFF3D4C2E) : Color(0xFFDDF6D2),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -115,7 +118,7 @@ class LoginScreen extends StatelessWidget {
                       .push(MaterialPageRoute(builder: (context) => HomeScreen()));*/
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFB0DB9C),
+                  backgroundColor: isDark ?  Color(0xFF468C00) : Color(0xFFB0DB9C),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -128,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(width: 8),
                     Text(
                       "Logging in...",
-                      style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
+                      style: TextStyle(fontSize: 16, /*color: Color(0xFF333333)*/),
                     ),
                   ],
                 ) : Text(
@@ -153,7 +156,7 @@ class LoginScreen extends StatelessWidget {
                 "Sign Up",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF6BCB77),
+                  color: isDark ?  Color(0xFF468C00) : Color(0xFFB0DB9C),
                 ),
               ),
             ),

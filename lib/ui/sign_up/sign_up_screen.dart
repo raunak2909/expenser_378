@@ -17,7 +17,6 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF2F2F2),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Column(
@@ -36,7 +35,7 @@ class SignUpScreen extends StatelessWidget {
           "Create Account",
           style: TextStyle(
             fontSize: 24,
-            color: Color(0xFF333333),
+            //color: Color(0xFF333333),
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
@@ -48,7 +47,7 @@ class SignUpScreen extends StatelessWidget {
             hintText: "Full Name",
             prefixIcon: Icon(Icons.person),
             filled: true,
-            fillColor: Color(0xFFDDF6D2),
+            //fillColor: Color(0xFFDDF6D2),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -62,7 +61,7 @@ class SignUpScreen extends StatelessWidget {
             hintText: "Email",
             prefixIcon: Icon(Icons.email),
             filled: true,
-            fillColor: Color(0xFFDDF6D2),
+            //fillColor: Color(0xFFDDF6D2),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -77,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
             hintText: "Phone Number",
             prefixIcon: Icon(Icons.phone),
             filled: true,
-            fillColor: Color(0xFFDDF6D2),
+            //fillColor: Color(0xFFDDF6D2),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -92,7 +91,7 @@ class SignUpScreen extends StatelessWidget {
             hintText: "Password",
             prefixIcon: Icon(Icons.lock),
             filled: true,
-            fillColor: Color(0xFFDDF6D2),
+            //fillColor: Color(0xFFDDF6D2),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,

@@ -69,6 +69,7 @@ import 'dart:math';
 import 'package:expenser_378/ui/sign_up/bloc/user_bloc.dart';
 import 'package:expenser_378/ui/sign_up/bloc/user_event.dart';
 import 'package:expenser_378/ui/sign_up/bloc/user_state.dart';
+import 'package:expenser_378/ui/theme_provider.dart';
 import 'package:expenser_378/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +90,7 @@ class _Home_PageState extends State<HomePage> {
   String mSelectedFilterType = "Date";
 
   bool isDark = false;
+   bool isSwitched = false;
 
   @override
   void initState() {
@@ -105,6 +107,11 @@ class _Home_PageState extends State<HomePage> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Switch(value: context.watch<ThemeProvider>().getThemeValue(), onChanged: (value){
+            context.read<ThemeProvider>().setThemeValue(value);
+          })
+        ],
         title: Row(
           children: [
             Container(
@@ -122,7 +129,7 @@ class _Home_PageState extends State<HomePage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
-                color: Colors.black,
+                ///color: Colors.black,
               ),
             ),
           ],
@@ -138,7 +145,6 @@ class _Home_PageState extends State<HomePage> {
             children: [
               Container(
                 width: double.infinity,
-                height: 60,
                 child: Row(
                   children: [
                     Container(
@@ -166,7 +172,7 @@ class _Home_PageState extends State<HomePage> {
                             children: [
                               Text(
                                 "Morning",
-                                style: TextStyle(fontSize: 16, color: Theme.of(context).brightness==Brightness.dark ? Colors.white54 : Colors.black54),
+                                style: TextStyle(fontSize: 16,),
                               ),
                               Text(state.userModel.name, style: TextStyle(fontSize: 16)),
                               Text(state.userModel.email, style: TextStyle(fontSize: 11, color: Colors.black54)),
