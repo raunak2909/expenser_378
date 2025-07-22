@@ -43,10 +43,90 @@ class MyApp extends StatelessWidget {
       themeMode: context.watch<ThemeProvider>().getThemeValue()
           ? ThemeMode.dark
           : ThemeMode.light,
-      darkTheme: ThemeData(brightness: Brightness.dark),
+      darkTheme: ThemeData(brightness: Brightness.dark,
+          textTheme: TextTheme(
+            headlineLarge: TextStyle(
+              fontSize: 38,
+              fontWeight: FontWeight.bold,
+            ),
+            headlineMedium: TextStyle(
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+            ),
+            headlineSmall: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+            titleLarge: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+            titleMedium: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            labelLarge: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+      ),
       theme: ThemeData(
         brightness: Brightness.light,
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff6750a4)),
+        textTheme: TextTheme(
+          headlineLarge: TextStyle(
+            fontSize: 38,
+            fontWeight: FontWeight.bold,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.bold,
+          ),
+          headlineSmall: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          labelLarge: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+          labelSmall: TextStyle(
+            fontSize: 11,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide.none,
+          ),
+        ),
+
       ),
       initialRoute: AppRoutes.SPLASHPAGE,
       routes: AppRoutes.routes,

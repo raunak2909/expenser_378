@@ -71,6 +71,7 @@ import 'package:expenser_378/ui/sign_up/bloc/user_event.dart';
 import 'package:expenser_378/ui/sign_up/bloc/user_state.dart';
 import 'package:expenser_378/ui/theme_provider.dart';
 import 'package:expenser_378/utils/app_constants.dart';
+import 'package:expenser_378/utils/ui_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,11 +127,12 @@ class _Home_PageState extends State<HomePage> {
             ),
             Text(
               "Monety",
-              style: TextStyle(
+              style: /*TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
                 ///color: Colors.black,
-              ),
+              ),*/
+              Theme.of(context).textTheme.bodyLarge,
             ),
           ],
         ),
@@ -172,10 +174,10 @@ class _Home_PageState extends State<HomePage> {
                             children: [
                               Text(
                                 "Morning",
-                                style: TextStyle(fontSize: 16,),
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.normal),
                               ),
-                              Text(state.userModel.name, style: TextStyle(fontSize: 16)),
-                              Text(state.userModel.email, style: TextStyle(fontSize: 11, color: Colors.black54)),
+                              Text(state.userModel.name, style: mTextStyle16(fontWeight: FontWeight.bold)),
+                              Text(state.userModel.email, style: Theme.of(context).textTheme.labelSmall),
                             ],
                           );
                         }
@@ -187,6 +189,7 @@ class _Home_PageState extends State<HomePage> {
                     DropdownMenu(
                       initialSelection: mSelectedFilterType,
                       width: 150,
+                      textStyle: Theme.of(context).textTheme.titleMedium,
                       inputDecorationTheme: InputDecorationTheme(
                         filled: true,
                         fillColor: isDark? Color(0xFF3D4C2E) : Color(0xFFDDF6D2),
@@ -210,7 +213,7 @@ class _Home_PageState extends State<HomePage> {
                         );
                       },
                       dropdownMenuEntries: mFilterType.map((e) {
-                        return DropdownMenuEntry(value: e, label: e);
+                        return DropdownMenuEntry(value: e, label: e,);
                       }).toList(),
                     ),
 
@@ -249,15 +252,16 @@ class _Home_PageState extends State<HomePage> {
                     children: [
                       Text(
                         'Expense total',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
                       ),
                       Text(
                         '\$3734',
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Colors.white)
+                        /*TextStyle(
                           color: Colors.white,
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
-                        ),
+                        ),*/
                       ),
                       Row(
                         children: [
@@ -269,16 +273,13 @@ class _Home_PageState extends State<HomePage> {
                             ),
                             child: Text(
                               '\$-240',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.normal)
                             ),
                           ),
                           SizedBox(width: 10),
                           Text(
                             'than last month',
-                            style: TextStyle(color: Colors.white, fontSize: 15),
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
                           ),
                         ],
                       ),
@@ -324,15 +325,11 @@ class _Home_PageState extends State<HomePage> {
                                         children: [
                                           Text(
                                             state.allExp[index].title,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style: Theme.of(context).textTheme.titleLarge
                                           ),
                                           Text(
                                             "\$${state.allExp[index].totalAmt.toString().split(".")[1] == "0" ? state.allExp[index].totalAmt.toInt() : state.allExp[index].totalAmt}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style: Theme.of(context).textTheme.titleLarge
                                           ),
                                         ],
                                       ),
@@ -390,31 +387,21 @@ class _Home_PageState extends State<HomePage> {
                                                           .allExp[index]
                                                           .expList[childIndex]
                                                           .title,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                      style: Theme.of(context).textTheme.titleMedium,
                                                     ),
                                                     Text(
                                                       state
                                                           .allExp[index]
                                                           .expList[childIndex]
                                                           .desc,
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.black87,
-                                                      ),
+                                                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.grey, fontWeight: FontWeight.normal),
                                                     ),
                                                   ],
                                                 ),
                                                 Spacer(),
                                                 Text(
                                                   '-\$ ${state.allExp[index].expList[childIndex].amt}',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.pink.shade200,
-                                                  ),
+                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.pink.shade200)
                                                 ),
                                               ],
                                             ),
